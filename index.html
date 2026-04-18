@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حروفنا الصغيرة | Hurofna Saghira</title>
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box}
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+       .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 {color: #667eea; margin-bottom: 10px; font-size: 28px}
+       .subtitle {color: #666; margin-bottom: 30px; font-size: 14px}
+       .lang-switch {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+       .lang-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+       .lang-btn.active {background: #667eea; color: white}
+       .display-area {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 25px;
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+       .letter {
+            font-size: 120px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            animation: pop 0.3s ease;
+        }
+        @keyframes pop {
+            0% {transform: scale(0)}
+            70% {transform: scale(1.1)}
+            100% {transform: scale(1)}
+        }
+       .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+       .btn-next {background: #667eea; color: white; grid-column: span 2}
+       .btn-next:hover {background: #5568d3; transform: translateY(-2px)}
+       .btn-prev {background: #e0e0e0; color: #333}
+       .btn-prev:hover {background: #d0d0d0}
+       .btn-speak {background: #4caf50; color: white}
+       .btn-speak:hover {background: #45a049}
+       .mode-switch {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+       .mode-btn {
+            padding: 10px 20px;
+            border: 2px solid #764ba2;
+            background: white;
+            color: #764ba2;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+       .mode-btn.active {background: #764ba2; color: white}
+       .progress {color: #666; font-size: 14px}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">حروفنا الصغيرة</h1>
+        <p class="subtitle" id="subtitle">تعلم الحروف والأرقام بثلاث لغات</p>
+        
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('ar')">العربية</button>
+            <button class="lang-btn" onclick="setLang('fr')">Français</button>
+            <button class="lang-btn" onclick="setLang('en')">English</button>
+        </div>
+
+        <div class="mode-switch">
+            <button class="mode-btn active" onclick="setMode('letters')" id="lettersBtn">الحروف</button>
+            <button class="mode-btn" onclick="setMode('numbers')" id="numbersBtn">الأرقام</button>
+        </div>
+
+        <div class="display-area">
+            <div class="letter" id="display">أ</div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-prev" onclick="prevItem()" id="prevBtn">السابق</button>
+            <button class="btn-speak" onclick="speakItem()" id="speakBtn">🔊 انطق</button>
+            <button class="btn-next" onclick="nextItem()" id="nextBtn">التالي</button>
+        </div>
+
+        <div class="progress" id="progress">1 / 28</div>
+    </div>
+
+    <script>
+        const data = {
+            ar: {
+                title: "حروفنا الصغيرة",
+                subtitle: "تعلم الحروف والأرقام بثلاث لغات",
+                lettersBtn: "الحروف",
+                numbersBtn: "الأرقام",
+                prevBtn: "السابق",
+                nextBtn: "التالي",
+                speakBtn: "🔊 انطق",
+                letters: ["أ","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ك","ل","م","ن","ه","و","ي"],
+                numbers: ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"],
+                letterNames: ["ألف","باء","تاء","ثاء","جيم","حاء","خاء","دال","ذال","راء","زاي","سين","شين","صاد","ضاد","طاء","ظاء","عين","غين","فاء","قاف","كاف","لام","ميم","نون","هاء","واو","ياء"],
+                numberNames: ["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة"],
+                langCode: "ar-SA"
+            },
+            fr: {
+                title: "Nos Petites Lettres",
+                subtitle: "Apprendre les lettres et chiffres en 3 langues",
+                lettersBtn: "Lettres",
+                numbersBtn: "Chiffres",
+                prevBtn: "Précédent",
+                nextBtn: "Suivant",
+                speakBtn: "🔊 Parler",
+                letters: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+                numbers: ["0","1","2","3","4","5","6","7","8","9"],
+                letterNames: ["A","Bé","Cé","Dé","Effe","Gé","Hache","I","Ji","Ka","Elle","Emme","Enne","O","Pé","Qu","Erre","Esse","Té","U","Vé","Double Vé","Ixe","Igrec","Zède"],
+                numberNames: ["Zéro","Un","Deux","Trois","Quatre","Cinq","Six","Sept","Huit","Neuf"],
+                langCode: "fr-FR"
+            },
+            en: {
+                title: "Our Little Letters",
+                subtitle: "Learn letters and numbers in 3 languages",
+                lettersBtn: "Letters",
+                numbersBtn: "Numbers",
+                prevBtn: "Previous",
+                nextBtn: "Next",
+                speakBtn: "🔊 Speak",
+                letters: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+                numbers: ["0","1","2","3","4","5","6","7","8","9"],
+                letterNames: ["Ay","Bee","Cee","Dee","Ee","Ef","Gee","Aitch","Eye","Jay","Kay","El","Em","En","Oh","Pee","Queue","Ar","Ess","Tee","You","Vee","Double You","Ex","Why","Zed"],
+                numberNames: ["Zero","One","Two","Three","Four","Five","Six","Seven","Eight","Nine"],
+                langCode: "en-US"
+            }
+        };
+
+        let currentLang = "ar";
+        let currentMode = "letters";
+        let currentIndex = 0;
+
+        function updateUI() {
+            const d = data[currentLang];
+            document.getElementById("title").textContent = d.title;
+            document.getElementById("subtitle").textContent = d.subtitle;
+            document.getElementById("lettersBtn").textContent = d.lettersBtn;
+            document.getElementById("numbersBtn").textContent = d.numbersBtn;
+            document.getElementById("prevBtn").textContent = d.prevBtn;
+            document.getElementById("nextBtn").textContent = d.nextBtn;
+            document.getElementById("speakBtn").textContent = d.speakBtn;
+            
+            const items = currentMode === "letters"? d.letters : d.numbers;
+            document.getElementById("display").textContent = items[currentIndex];
+            document.getElementById("progress").textContent = `${currentIndex + 1} / ${items.length}`;
+            
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === "ar"? "rtl" : "ltr";
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            currentIndex = 0;
+            document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+            updateUI();
+            speakItem();
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            currentIndex = 0;
+            document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.remove("active"));
+            event.target.classList.add("active");
+            updateUI();
+        }
+
+        function nextItem() {
+            const d = data[currentLang];
+            const items = currentMode === "letters"? d.letters : d.numbers;
+            currentIndex = (currentIndex + 1) % items.length;
+            updateUI();
+            speakItem();
+        }
+
+        function prevItem() {
+            const d = data[currentLang];
+            const items = currentMode === "letters"? d.letters : d.numbers;
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateUI();
+            speakItem();
+        }
+
+        function speakItem() {
+            const d = data[currentLang];
+            const items = currentMode === "letters"? d.letterNames : d.numberNames;
+            const text = items[currentIndex];
+            
+            if ('speechSynthesis' in window) {
+                speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = d.langCode;
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
